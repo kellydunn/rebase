@@ -3,8 +3,10 @@
 set -e
 
 # skip if no /rebase
-echo "Checking if contains '/rebase' command..."
-(jq -r ".comment.body" "$GITHUB_EVENT_PATH" | grep -Fq "/rebase") || exit 78
+if ["$REQUIRE_REBASE_COMMENT" == "true"]; then
+  echo "Checking if contains '/rebase' command..."
+  (jq -r ".comment.body" "$GITHUB_EVENT_PATH" | grep -Fq "/rebase") || exit 78
+fi
 
 # skip if not a PR
 echo "Checking if a PR command..."
